@@ -5,7 +5,7 @@ const rutas = express.Router();
 
 
 // ruta usando query para buscar la categoria
-// usemos este ejemplo http://localhost:3000/usuarios/?limit=50&offset=200
+// usemos este ejemplo http://localhost:3000/api/v1/usuarios/?limit=50&offset=200
 rutas.get('/', (req, res) => {
   const { limit, offset }= req.query
   if (limit && offset){

@@ -6,7 +6,7 @@ const rutas = express.Router();
 
 // ruta productos
 // ruta productos con cantidad de productos especificada
-//por ejemplo pidamos 55 asi:  http://localhost:3000/productos?size=55
+//por ejemplo pidamos 55 asi:  http://localhost:3000/api/v1/productos?size=55
 
 rutas.get('/', (req, res) => {
   const products=[];
@@ -24,7 +24,7 @@ rutas.get('/', (req, res) => {
 })
 
 // ruta a producto especifico
-//http://localhost:3000/productos/productox
+//http://localhost:3000/api/v1/productos/productox
 rutas.get('/:id', (req, res) => {
   const { id }= req.params
   res.json([
