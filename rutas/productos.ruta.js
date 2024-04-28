@@ -32,13 +32,35 @@ rutas.get('/:id', (req, res) => {
   ]);
 })
 
-// vamos a crear un producto con 'post'
+// vamos a crear un producto con POST:
 // recuerde que para esto en el index original debe incluir app.use(express.json()); en el encabezado
 rutas.post('/', (req, res) => {
   const body= req.body
   res.json({
     message:'Creado',
     data:body
+  });
+})
+
+// vamos a ACTUALIZAR un producto con 'PATCH'
+//esto actualiza un producto en especifico
+rutas.patch('/:id', (req, res) => {
+  const body= req.body
+  const { id }= req.params
+  res.json({
+    message:'Producto actualizado',
+    data:body,
+    id
+  });
+})
+
+// vamos a ELIMINAR un producto con 'DELETE'
+//esto elimina un producto en especifico
+rutas.delete('/:id', (req, res) => {
+  const { id }= req.params
+  res.json({
+    message:'Producto eliminado',
+    id
   });
 })
 
