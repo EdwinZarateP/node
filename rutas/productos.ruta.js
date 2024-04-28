@@ -32,4 +32,14 @@ rutas.get('/:id', (req, res) => {
   ]);
 })
 
+// vamos a crear un producto con 'post'
+// recuerde que para esto en el index original debe incluir app.use(express.json()); en el encabezado
+rutas.post('/', (req, res) => {
+  const body= req.body
+  res.json({
+    message:'Creado',
+    data:body
+  });
+})
+
 module.exports = rutas;
