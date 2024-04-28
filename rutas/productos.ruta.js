@@ -27,16 +27,22 @@ rutas.get('/', (req, res) => {
 //http://localhost:3000/api/v1/productos/productox
 rutas.get('/:id', (req, res) => {
   const { id }= req.params
-  res.json([
+  if(id==='999'){
+    res.status(404).json(
+      {message:"No encontrado"}
+    );
+  }else {
+  res.status(200).json([
     {id, name:"p1", price:"5000"}
   ]);
+  }
 })
 
 // vamos a crear un producto con POST:
 // recuerde que para esto en el index original debe incluir app.use(express.json()); en el encabezado
 rutas.post('/', (req, res) => {
   const body= req.body
-  res.json({
+  res.status(201).json({
     message:'Creado',
     data:body
   });
