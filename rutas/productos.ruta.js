@@ -1,73 +1,59 @@
 const express = require('express');
-const { faker } = require('@faker-js/faker');
+const servicioProductos = require('./../servicios/productos.servicios')
 
 const rutas = express.Router();
+const servicio= new servicioProductos();
 
 
 // ruta productos
 // ruta productos con cantidad de productos especificada
 //por ejemplo pidamos 55 asi:  http://localhost:3000/api/v1/productos?size=55
 
-rutas.get('/', (req, res) => {
-  const products=[];
-  const { size }= req.query
-  const limit=size || 10;
-  for (let index = 0; index < limit; index++) {
-    products.push({
-      name:faker.commerce.productName(),
-      price:parseInt(faker.commerce.price(),10),
-      image:faker.image.imageUrl()
-    });
-
-  }
-  res.json(products);
+rutas.get('/', async (req, res) => {
+  const productos=await servicio.buscar();
+  res.json(productos);
 })
 
 // ruta a producto especifico
 //http://localhost:3000/api/v1/productos/productox
-rutas.get('/:id', (req, res) => {
+rutas.get('/:id', async (req, res) => {
   const { id }= req.params
-  if(id==='999'){
-    res.status(404).json(
-      {message:"No encontrado"}
-    );
-  }else {
-  res.status(200).json([
-    {id, name:"p1", price:"5000"}
-  ]);
-  }
+  const producto= await servicio.buscarUno(id);
+  res.json(producto)
 })
 
 // vamos a crear un producto con POST:
 // recuerde que para esto en el index original debe incluir app.use(express.json()); en el encabezado
-rutas.post('/', (req, res) => {
+rutas.post('/', async (req, res) => {
   const body= req.body
-  res.status(201).json({
-    message:'Creado',
-    data:body
-  });
+  const nuevoProducto = await servicio.crear(body);
+  res.status(201).json(nuevoProducto);
 })
 
 // vamos a ACTUALIZAR un producto con 'PATCH'
 //esto actualiza un producto en especifico
-rutas.patch('/:id', (req, res) => {
-  const body= req.body
-  const { id }= req.params
-  res.json({
-    message:'Producto actualizado',
-    data:body,
-    id
-  });
+//http://localhost:3000/api/v1/productos/productox
+rutas.patch('/:id', async (req, res) => {
+
+  try {
+  const { id }= req.params;
+  const body= req.body;
+  const producto = await servicio.actualizar(id, body);
+  res.json(producto);
+  } catch (error) {
+    res.status(404).json({
+      message:error.message
+    })
+  }
+
 })
 
 // vamos a ELIMINAR un producto con 'DELETE'
 //esto elimina un producto en especifico
-rutas.delete('/:id', (req, res) => {
+rutas.delete('/:id', async (req, res) => {
   const { id }= req.params
-  res.json({
-    message:'Producto eliminado',
-    id
-  });
+  const respuesta = await servicio.eliminar(id);
+  res.json(respuesta);
 })
 
 module.exports = rutas;
